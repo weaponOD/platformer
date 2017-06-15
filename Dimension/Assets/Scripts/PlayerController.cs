@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour {
     private Vector3 lastMotion;
     private CharacterController controller; // ref to our controller
 
+
+
 	void Start ()
     {
 
@@ -78,9 +80,41 @@ public class PlayerController : MonoBehaviour {
         //Debug.Log(moveVector);
         controller.Move(moveVector * Time.deltaTime);
         lastMotion = moveVector;
+
+		if(HitRoof()){
+			verticalVelocity = 0;
+		}
 	}
 
 
+	private bool HitRoof(){
+
+		Vector3 leftRayTopStart;
+		Vector3 rightRayTopStart;
+
+		leftRayTopStart = controller.bounds.center;
+		rightRayTopStart = controller.bounds.center;
+
+		leftRayTopStart.x -= controller.bounds.extents.x;
+		rightRayTopStart.x += controller.bounds.extents.x;
+
+
+		Debug.DrawRay(leftRayTopStart, Vector3.up, Color.blue);
+		Debug.DrawRay(rightRayTopStart, Vector3.up, Color.yellow);
+
+		if (Physics.Raycast (leftRayTopStart, Vector3.up, (controller.height / 2) + 0.1f)){
+			return true;
+		}
+
+
+
+		if (Physics.Raycast(rightRayTopStart, Vector3.up, (controller.height / 2) + 0.1f)){
+			return true;
+		}
+
+		return false;
+
+	}
 
 
 
